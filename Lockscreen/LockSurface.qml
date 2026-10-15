@@ -5,23 +5,30 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
 import Quickshell.Widgets
+import qs.Auxiliary
 
 WlSessionLock {
     id: lock
 
     WlSessionLockSurface {
-        Button {
-            text: "Unlock me"
-            onClicked: lock.locked = false
-        }
-    }
+        Rectangle {
+            anchors {
+                centerIn: parent
+                fill: parent
+            }
 
-    IpcHandler {
-        target: "lock"
+            Image {
+                source: "/home/kian/quickshell/Lockscreen/Extras/bg.jpg"
+                anchors {
+                    centerIn: parent
+                    fill: parent
+                }
+            }
 
-        function setLock(isLocked: bool): void {
-            if (isLocked) {
-                lock.locked = true;
+            Button {
+                anchors.centerIn: parent
+                text: "Unlock me"
+                onClicked: lock.locked = false
             }
         }
     }
