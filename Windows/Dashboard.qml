@@ -1,60 +1,85 @@
 import Quickshell
 import QtQuick
+import qs.Auxiliary
 import qs.Widgets
 
 PanelWindow {
-  visible: true
-  
-  implicitWidth: 100
-  implicitHeight: 100
+    id: mainWindow
+    visible: false
 
-  color: "#00ffffff"
+    implicitWidth: 100
+    implicitHeight: 100
 
+    color: "#00ffffff"
 
-  Rectangle {
-    id: rsWidgetRect
-    state: "hidden"
+    Rectangle {
+        id: rsWidgetRect
+        state: States.shown
 
-    states: [
-      State {
-        name: "visible"
-        PropertyChanges { target: rsWidgetRect; visible: true; }
-      },
-      State {
-        name: "hidden"
-        PropertyChanges { target: rsWidgetRect; visible: false; }
-      }
-    ]
+        states: [
+            State {
+                name: "visible"
+            },
+            State {
+                name: "hidden"
+            }
+        ]
 
-    transitions: Transition {
-      from: "hidden"
-      to: "visible"
-      OpacityAnimator {
-        target: rsWidgetRect;
-        from: 0;
-        to: 1;
-        duration: 500;
-        running: true
-      }
+        transitions: [
+            Transition {
+                from: "hidden"
+                to: "visible"
+                SequentialAnimation {
+                    ScriptAction {
+                        script: {
+                            mainWindow.visible = true;
+                        }
+                    }
+                    OpacityAnimator {
+                        target: rsWidgetRect
+                        from: 0
+                        to: 1
+                        duration: 500
+                    }
+                }
+            },
+            Transition {
+                from: "visible"
+                to: "hidden"
+                SequentialAnimation {
+                    NumberAnimation {
+                        target: rsWidgetRect
+                        property: "opacity"
+                        from: 1
+                        to: 0
+                        duration: 500
+                    }
+                    ScriptAction {
+                        script: {
+                            console.log("Not running anymore");
+                            mainWindow.visible = false;
+                        }
+                    }
+                }
+            }
+        ]
+        color: "#ff1b1b1b"
+
+        implicitWidth: rsWidget.implicitWidth + 10
+        implicitHeight: rsWidget.implicitHeight + 10
+        radius: 5
+        anchors {
+            centerIn: parent
+        }
+
+        RedshiftWidget {
+            id: rsWidget
+            implicitWidth: 30
+            implicitHeight: 30
+
+            anchors {
+                centerIn: parent
+            }
+        }
     }
-
-    color: "#ff1b1b1b" 
-
-    implicitWidth: rsWidget.implicitWidth + 10
-    implicitHeight: rsWidget.implicitHeight + 10
-    radius: 5
-    anchors {
-      centerIn: parent
-    }
-
-    RedshiftWidget {
-      id: rsWidget
-      implicitWidth: 30
-      implicitHeight: 30
-
-      anchors {
-        centerIn: parent
-      }
-    }
-  }
 }

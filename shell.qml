@@ -8,6 +8,6 @@ import qs.Widgets
 import qs.Auxiliary
 
 Scope {
-  Bar {}
-  Dashboard {}
+    Bar {}
+    Dashboard {}
 }
